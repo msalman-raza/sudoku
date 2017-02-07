@@ -1,0 +1,3 @@
+sudoku_homepage:
+    path:     /
+    defaults: { _controller: SudokuBundle:Default:index }
