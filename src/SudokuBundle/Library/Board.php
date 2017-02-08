@@ -3,6 +3,7 @@ namespace SudokuBundle\Library;
 
 
 use SudokuBundle\Exceptions\InvalidArgumentException;
+use SudokuBundle\Library\Validator\ValidatorInterface;
 use SudokuBundle\Library\Value\ValueInterface;
 use SudokuBundle\Repository\SudokuGameRepository;
 
@@ -14,11 +15,20 @@ class Board
     protected $valueClass;
     protected $dimension;
     protected $sections;
+    protected $completedSections = [];
+    protected $conflicts;
+    protected $validator;
 
-    public function __construct( string $valueClass, int $dimension)
+
+    public function __construct(
+        string $valueClass,
+        int $dimension,
+        ValidatorInterface $validator
+    )
     {
         $this->setValueClass($valueClass);
         $this->setDimension($dimension);
+        $this->validator = $validator;
     }
 
 
@@ -28,10 +38,35 @@ class Board
         for ($x=0 ; $x<$this->dimension ; $x++){
             for ($y=0 ; $y<$this->dimension ; $y++){
                 $value = $this->makeValueObject($data[$x][$y]);
-                $cell = new Cell($x,$y,$value,1);
+                $lock = ($data[$x][$y] == "")?false:true;
+                $cell = new Cell($x,$y,$value,$lock);
                 $this->addCell($cell);
             }
         }
+        $this->validate();
+    }
+
+    public function makeExistingGame(array $lockedData, array $data)
+    {
+        $this->makeHash();
+        for ($x=0 ; $x<$this->dimension ; $x++){
+            for ($y=0 ; $y<$this->dimension ; $y++){
+                $value = $this->makeValueObject($lockedData[$x][$y],$data[$x][$y]);
+                $lock = ($lockedData[$x][$y] == "")?false:true;
+                $cell = new Cell($x,$y,$value,$lock);
+                $this->addCell($cell);
+            }
+        }
+        $this->validate();
+    }
+
+    public function setCell($value , int $x , int $y)
+    {
+        $valueObject = new $this->valueClass($value);
+        $cell = $this->cells[$x][$y];
+        $cell->setValue($valueObject);
+
+        $this->validate($cell);
     }
 
     public function getGameAsArray() : array
@@ -57,6 +92,63 @@ class Board
         return $gameArray;
     }
 
+    public function getStatus() : string
+    {
+        if ($this->dimension * 3 == $this->getCompletedSectionsCount()) {
+            return "Complete";
+        } elseif ( count($this->conflicts) > 0) {
+            return "Error";
+        } else {
+            return "Pending";
+        }
+    }
+
+    public function getCompletedSectionsCount() : int
+    {
+        return count($this->completedSections);
+    }
+
+    public function getConflicts() : array
+    {
+        return $this->conflicts;
+    }
+
+    protected function validate(Cell $cell = null)
+    {
+        $this->conflicts = [];
+        $cellSections = ($cell) ? $this->getCellSections($cell) : $this->getAllSections();
+        foreach ($cellSections as $number){
+            $this->validator->validate( $this->sections[$number] );
+            if($this->validator->getStatus() == "Complete") {
+                $this->addToCompletedSections($number);
+            } else {
+                $this->removeFromCompletedSections($number);
+                $this->addToConflicts( $this->validator->getConflicts() );
+            }
+        }
+
+    }
+
+    protected function addToCompletedSections(int $number)
+    {
+        if(!in_array($number , $this->completedSections)){
+            $this->completedSections[] = $number;
+        }
+    }
+
+    protected function removeFromCompletedSections(int $number)
+    {
+        if(($key = array_search($number, $this->completedSections)) !== false) {
+            unset($this->completedSections[$key]);
+        }
+    }
+
+    protected function addToConflicts(array $conflicts)
+    {
+        foreach ($conflicts as $row) {
+            $this->conflicts[$row['x']][$row['y']] = $row['message'];
+        }
+    }
     protected function setValueClass(string $valueClass)
     {
         if(is_a($valueClass,'SudokuBundle\Library\Value\ValueInterface',true)){
@@ -106,6 +198,13 @@ class Board
         $cellSections[] = $cell->getX();
         $cellSections[] = $this->dimension + $cell->getY();
         $cellSections[] = ($this->dimension * 2) + $this->getRegion($cell);
+        return $cellSections;
+    }
+
+    protected function getAllSections(){
+        for($i = 0 ; $i < $this->dimension * 3 ; $i++){
+            $cellSections[] = $i;
+        }
         return $cellSections;
     }
 
