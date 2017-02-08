@@ -5,9 +5,10 @@ use Exception;
 
 class InvalidArgumentException extends \Exception
 {
-    public function __construct()
+    public function __construct($message = null)
     {
-        $message = "Invalid Argument";
+
+        $message = $message ?? "Invalid Argument";
         parent::__construct($message, 400, null);
     }
 

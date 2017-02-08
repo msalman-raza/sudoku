@@ -47,6 +47,20 @@ class CellTest extends TestCase
         $this->assertEquals($this->object->getValue(),9);
     }
 
+    public function testNullValue()
+    {
+        $obj = new Cell(1,2);
+        $this->assertNull($obj->getValue());
+    }
+
+    public function testIsLocked()
+    {
+        $this->assertFalse($this->object->isLocked());
+        $valueObject = new NumberValue(9);
+        $obj = new Cell(1,2,$valueObject,1);
+        $this->assertTrue($obj->isLocked());
+    }
+
     /**
      * @expectedException SudokuBundle\Exceptions\AccessDeniedException
      */

@@ -20,7 +20,7 @@ class Cell
     public function __construct(
         int $x,
         int $y,
-        ValueInterface $value,
+        ValueInterface $value = null,
         bool $lock = false
     )
     {
@@ -42,7 +42,7 @@ class Cell
 
     public function getValue()
     {
-        return $this->value->get();
+        return ($this->value) ? $this->value->get() : null;
     }
 
     public function setValue(ValueInterface $value)
@@ -52,6 +52,12 @@ class Cell
         } else {
             throw new AccessDeniedException();
         }
+
+    }
+
+    public function isLocked() : bool
+    {
+       return $this->lock;
 
     }
 

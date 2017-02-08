@@ -9,6 +9,7 @@
 namespace SudokuBundle\Root;
 
 
+
 class Game
 {
     public function __construct()
@@ -17,10 +18,8 @@ class Game
     }
 
     public function createGame(){
-        $cell = new Cell(5);
-        $section = new Section($cell);
-        $cell->setNumber(15);
-        echo $section->getCellNumber()."----";
+
+
         return "Game Created";
     }
 }

@@ -14,6 +14,11 @@ class NumberValueTest extends TestCase
         $this->assertEquals(6,$object->get());
     }
 
+    public function testGetHeight()
+    {
+        $this->assertEquals(9,NumberValue::getHeight());
+    }
+
     /**
      * @expectedException \TypeError
      */
