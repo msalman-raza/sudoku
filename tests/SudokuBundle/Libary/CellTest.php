@@ -1,24 +1,23 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: salmanraza
- * Date: 2/7/17
- * Time: 5:59 PM
- */
 
 namespace Tests\SudokuBundle\Library;
 
 
 use PHPUnit\Framework\TestCase;
 use SudokuBundle\Library\Cell;
+use SudokuBundle\Library\Validator\GenericCellValidator;
+use SudokuBundle\Library\Value\NumberValue;
 
 class CellTest extends TestCase
 {
     protected $object;
+    protected $validator;
+
 
     public function setUp()
     {
-        $this->object = new Cell(0,2,5,0);
+        $valueObject = new NumberValue(3);
+        $this->object = new Cell(0,2,$valueObject);
     }
 
     public function tearDown()
@@ -38,12 +37,13 @@ class CellTest extends TestCase
 
     public function testGetValue()
     {
-        $this->assertEquals($this->object->getValue(),5);
+        $this->assertEquals($this->object->getValue(),3);
     }
 
     public function testSetValue()
     {
-        $this->object->setValue(9);
+        $valueObject = new NumberValue(9);
+        $this->object->setValue($valueObject);
         $this->assertEquals($this->object->getValue(),9);
     }
 
@@ -52,7 +52,10 @@ class CellTest extends TestCase
      */
     public function testSetLockedValue()
     {
-        $obj = new Cell(1,2,3,1);
-        $obj->setValue(9);
+        $valueObject = new NumberValue(6);
+        $obj = new Cell(1,2,$valueObject,1);
+        $obj->setValue($valueObject);
     }
+
+
 }

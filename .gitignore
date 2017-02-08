@@ -15,9 +15,7 @@
 !var/logs/.gitkeep
 !var/sessions/.gitkeep
 
-# Parameters
-/app/config/parameters.yml
-/app/config/parameters.ini
+
 
 # Managed by Composer
 /app/bootstrap.php.cache
@@ -29,14 +27,11 @@
 
 # Assets and user uploads
 /web/bundles/
-/web/uploads/
+/public/uploads/
 
 # Assets managed by Bower
-/web/assets/vendor/
+/public/assets/vendor/
 
-# PHPUnit
-/app/phpunit.xml
-/phpunit.xml
 
 # Build data
 /build/
@@ -50,3 +45,5 @@
 .idea/
 composer.lock
 .vagrant/
+Homestead.yaml
+Vagrantfile

@@ -1,8 +1,11 @@
-<?php namespace SudokuBundle\Library;
+<?php
+
+namespace SudokuBundle\Library;
 
 
 use SudokuBundle\Exceptions\AccessDeniedException;
 use SudokuBundle\Exceptions\InvalidArgument;
+use SudokuBundle\Library\Value\ValueInterface;
 
 class Cell
 {
@@ -11,12 +14,14 @@ class Cell
     protected $value;
     protected $lock;
     protected $valid = true;
+    protected $validator;
+
 
     public function __construct(
         int $x,
         int $y,
-        $value,
-        bool $lock
+        ValueInterface $value,
+        bool $lock = false
     )
     {
         $this->x = $x;
@@ -37,10 +42,10 @@ class Cell
 
     public function getValue()
     {
-        return $this->value;
+        return $this->value->get();
     }
 
-    public function setValue($value)
+    public function setValue(ValueInterface $value)
     {
         if(!$this->lock){
             $this->value = $value;
