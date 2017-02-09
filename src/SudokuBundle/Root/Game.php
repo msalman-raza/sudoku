@@ -84,7 +84,7 @@ class Game
      *
      * @return array
      */
-    public function updateCell(string $hash, $value, int $x, int $y)
+    public function updateCell(string $hash, $value, int $x, int $y) : array
     {
         $entity = $this->makeExistingGame($hash);
         $this->board->setCell($value , $x , $y);
@@ -107,7 +107,7 @@ class Game
      *
      * @return array
      */
-    public function getGame(string $hash)
+    public function getGame(string $hash) : array
     {
 
         $this->makeExistingGame($hash);
@@ -128,7 +128,7 @@ class Game
      *
      * @return array
      */
-    public function deleteGame(string $hash)
+    public function deleteGame(string $hash) : array 
     {
 
         $entity = $this->getEntity($hash);
