@@ -1,14 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: salmanraza
- * Date: 2/7/17
- * Time: 3:06 PM
- */
-
 namespace SudokuBundle\Root;
-
-
 
 use Doctrine\ORM\EntityManager;
 use SudokuBundle\Entity\SudokuGame;
@@ -18,10 +9,9 @@ use SudokuBundle\Repository\SudokuGameRepository;
 use SudokuBundle\Resources\Games\SampleGame;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
+
 class Game
 {
-    use ContainerAwareTrait;
-
     protected $em;
     protected $repository;
     protected $board;
@@ -38,6 +28,11 @@ class Game
         $this->board = $board;
     }
 
+    /**
+     * Creates the game.
+     *
+     * @return array
+     */
     public function createGame() : array
     {
         $data = SampleGame::getGame();
@@ -59,6 +54,16 @@ class Game
         return $returnData;
     }
 
+    /**
+     * Updates the cell of board
+     *
+     * @param string $hash hash of game, returned on game creation
+     * @param $value new value of cell
+     * @param int $x Row of board
+     * @param int $y Column of board
+     *
+     * @return array
+     */
     public function updateCell(string $hash, $value, int $x, int $y)
     {
         $entity = $this->makeExistingGame($hash);
@@ -75,6 +80,13 @@ class Game
         return $returnData;
     }
 
+    /**
+     * Get complete game
+     *
+     * @param string $hash hash of game, returned on game creation
+     *
+     * @return array
+     */
     public function getGame(string $hash)
     {
 
@@ -89,6 +101,13 @@ class Game
         return $returnData;
     }
 
+    /**
+     * Deletes the game
+     *
+     * @param string $hash hash of game, returned on game creation
+     *
+     * @return array
+     */
     public function deleteGame(string $hash)
     {
 
@@ -100,7 +119,13 @@ class Game
         return $returnData;
     }
 
-
+    /**
+     * Crates the game from database, used in updateCell and getGame functions
+     *
+     * @param string $hash hash of game, returned on game creation
+     *
+     * @return SudokuGame
+     */
     protected function makeExistingGame(String $hash) : SudokuGame
     {
         $entity = $this->getEntity($hash);
@@ -110,6 +135,13 @@ class Game
         return $entity;
     }
 
+    /**
+     * Returns the SuduokuGame entity, also throws error if not found
+     *
+     * @param string $hash hash of game, returned on game creation
+     *
+     * @return SudokuGame
+     */
     protected function getEntity(String $hash) : SudokuGame
     {
         $entity = $this->repository->findOneByHash($hash);

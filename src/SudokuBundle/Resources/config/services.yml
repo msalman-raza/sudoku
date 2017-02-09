@@ -21,8 +21,6 @@ services:
             - "@doctrine.orm.entity_manager"
             - "@sudoku.repository"
             - "@sudoku.board"
-        calls:
-            - [setContainer, ["@service_container"]]
 
     sudoku.value:
         class: SudokuBundle\Library\Value\NumberValue
