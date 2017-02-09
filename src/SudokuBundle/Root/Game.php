@@ -12,11 +12,31 @@ use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 class Game
 {
+    /**
+     * @var EntityManager
+     */
     protected $em;
+
+    /**
+     * @var SudokuGameRepository
+     */
     protected $repository;
+
+    /**
+     * @var Board
+     */
     protected $board;
 
 
+    /**
+     * Create a new game object
+     *
+     * @param  EntityManager   $em
+     * @param  SudokuGameRepository  $repository
+     * @param  Board  $board
+     *
+     * @return Game
+     */
     public function __construct(
         EntityManager $em ,
         SudokuGameRepository $repository,
