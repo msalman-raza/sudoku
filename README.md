@@ -14,6 +14,7 @@ To Install application follow the steps
     4. vagrant ssh
     5. cd  /home/vagrant/sudoku
     6. php bin/console doctrine:schema:update --force 
+    7. vendor/bin/phpunit to run the unit tests
     
     Last step is needed to run the migrations.
     
