@@ -146,7 +146,7 @@ class Game
      *
      * @return SudokuGame
      */
-    protected function makeExistingGame(String $hash) : SudokuGame
+    protected function makeExistingGame(string $hash) : SudokuGame
     {
         $entity = $this->getEntity($hash);
         $lockedGame = json_decode($entity->getLockedGame());
@@ -164,7 +164,7 @@ class Game
      *
      * @return SudokuGame
      */
-    protected function getEntity(String $hash) : SudokuGame
+    protected function getEntity(string $hash) : SudokuGame
     {
         $entity = $this->repository->findOneByHash($hash);
         if($entity) {

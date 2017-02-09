@@ -21,8 +21,3 @@ services:
             - "@doctrine.orm.entity_manager"
             - "@sudoku.repository"
             - "@sudoku.board"
-
-    sudoku.value:
-        class: SudokuBundle\Library\Value\NumberValue
-        arguments:
-            - "5"
