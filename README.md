@@ -20,6 +20,14 @@ To Install application follow the steps
     
     
  -------------------------------
+ 
+ API Calls
+ -
+ 
+ - http://homestead.app/sudoku [post] will make a game and will send game data with hash
+ - http://homestead.app/sudoku [put] with x-www-form-urlencoded data [hash,value,row,colum] and it will update cell in database and sends the status and any conflicts found
+ - http://homestead.app/sudoku/{hash} [Get] with hash in url to get complete data regarding game
+ - http://homestead.app/sudoku [Delete] with x-www-form-urlencoded data [hash] and it will delete the game.
     
 Description
 -
