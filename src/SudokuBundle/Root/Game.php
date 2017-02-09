@@ -128,7 +128,7 @@ class Game
      *
      * @return array
      */
-    public function deleteGame(string $hash) : array 
+    public function deleteGame(string $hash) : array
     {
 
         $entity = $this->getEntity($hash);
@@ -160,6 +160,8 @@ class Game
      *
      * @param string $hash hash of game, returned on game creation
      *
+     * @throws InvalidArgumentException if hash not found
+     * 
      * @return SudokuGame
      */
     protected function getEntity(String $hash) : SudokuGame
