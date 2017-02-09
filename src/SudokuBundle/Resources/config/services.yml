@@ -1,4 +1,30 @@
 services:
-#    sudoku.example:
-#        class: SudokuBundle\Example
-#        arguments: ["@service_id", "plain_value", "%parameter%"]
+    sudoku.repository:
+        class: Doctrine\ORM\EntityRepository
+        factory: ["@doctrine.orm.entity_manager", getRepository]
+        arguments:
+            - SudokuBundle\Entity\SudokuGame
+
+    sudoku.validator:
+            class: SudokuBundle\Library\Validator\UniqueValidator
+
+    sudoku.board:
+        class: SudokuBundle\Library\Board
+        arguments:
+            - '\SudokuBundle\Library\Value\NumberValue'
+            - 9
+            - "@sudoku.validator"
+
+    sudoku.root:
+        class: SudokuBundle\Root\Game
+        arguments:
+            - "@doctrine.orm.entity_manager"
+            - "@sudoku.repository"
+            - "@sudoku.board"
+        calls:
+            - [setContainer, ["@service_container"]]
+
+    sudoku.value:
+        class: SudokuBundle\Library\Value\NumberValue
+        arguments:
+            - "5"

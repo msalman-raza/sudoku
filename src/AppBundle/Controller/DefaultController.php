@@ -9,14 +9,23 @@ use SudokuBundle\Root;
 
 class DefaultController extends Controller
 {
+    protected $sudokuObject;
+    public function __construct()
+    {
+
+    }
+
     /**
      * @Route("/", name="homepage")
      */
     public function indexAction(Request $request)
     {
-        $game = new Root\Game();
-        echo $game->createGame();
-
-        die();
+        $object = $this->get('sudoku.root');
+        $hash = 'f5c4262d602a4a4';
+        $hash = 'ebb0dfc2b22ecaf';
+        $data = $object->updateCell($hash , 6, 0 ,3);
+       // $data = $object->deleteGame($hash);
+        print_r($data);
+        exit();
     }
 }

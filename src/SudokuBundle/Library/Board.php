@@ -113,6 +113,11 @@ class Board
         return $this->conflicts;
     }
 
+    public function getHash() : string
+    {
+        return $this->hash;
+    }
+
     protected function validate(Cell $cell = null)
     {
         $this->conflicts = [];
